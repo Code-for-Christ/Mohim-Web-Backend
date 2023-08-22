@@ -6,11 +6,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,21 +49,26 @@ public class Auth implements UserDetails {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime deletedAt = LocalDateTime.now(); // 삭제일
 
+    @OneToMany(mappedBy = "auth")
+    private List<Role> roles;
+
+    @Transient
+    private List<SimpleGrantedAuthority> authorities;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.hashedPassword;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.email;
     }
 
     @Override
