@@ -15,10 +15,10 @@ public class RolePrevilegeAssociation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "previlege_id")
     private Previlege previlege;
 }
