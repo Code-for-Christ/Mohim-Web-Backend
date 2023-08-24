@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class RolePrevilegeAssociation {
+public class RolePermissionAssociation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,6 @@ public class RolePrevilegeAssociation {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "previlege_id")
-    private Previlege previlege;
+    @JoinColumn(name = "permission_id")
+    private Permission permission;
 }
