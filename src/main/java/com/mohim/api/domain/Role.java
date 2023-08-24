@@ -18,10 +18,6 @@ public class Role {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auth_id")
-    private Auth auth;
-
     @OneToMany(mappedBy = "role")
     private List<RolePermissionAssociation> rolePermissionAssociations;
 }
