@@ -1,6 +1,7 @@
 package com.mohim.api.service;
 
 import com.mohim.api.domain.Auth;
+import com.mohim.api.domain.AuthRoleAssociation;
 import com.mohim.api.domain.Role;
 import com.mohim.api.domain.RolePermissionAssociation;
 import lombok.RequiredArgsConstructor;
@@ -28,23 +29,25 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         auth.setAuthorities(
                 Stream.concat(
-                        getRoles(auth.getRoles()).stream(),
-                        getPrivileges(auth.getRoles()).stream()
+                        getRoles(auth.getAuthRoleAssociations()).stream(),
+                        getPrivileges(auth.getAuthRoleAssociations()).stream()
                 ).collect(Collectors.toList())
         );
 
         return auth;
     }
 
-    private List<SimpleGrantedAuthority> getRoles(List<Role> roles) {
-        return roles.stream()
+    private List<SimpleGrantedAuthority> getRoles(List<AuthRoleAssociation> authRoleAssociations) {
+        return authRoleAssociations.stream()
+                .map(AuthRoleAssociation::getRole)
                 .map(Role::getName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
-    private List<SimpleGrantedAuthority> getPrivileges(List<Role> roles) {
-        return roles.stream()
+    private List<SimpleGrantedAuthority> getPrivileges(List<AuthRoleAssociation> authRoleAssociations) {
+        return authRoleAssociations.stream()
+                .map(AuthRoleAssociation::getRole)
                 .flatMap(role -> role.getRolePermissionAssociations().stream())
                 .map(RolePermissionAssociation::getPermission)
                 .map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
