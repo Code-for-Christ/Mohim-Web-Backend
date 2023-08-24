@@ -28,7 +28,7 @@ class CustomUserDetailsServiceTest {
         UserDetails user = customUserDetailsService.loadUserByUsername("sungkyum1@gmail.com");
         // then
         assertThat(user.getAuthorities()).extracting(GrantedAuthority::getAuthority)
-                .contains("ROLE_ADMIN", "WRITE_AUTHORITY");
+                .contains("ROLE_ADMIN", "WRITE_PERMISSION");
         System.out.println("user's Authorities : " + user.getAuthorities());
     }
 }
