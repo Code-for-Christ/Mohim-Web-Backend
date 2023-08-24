@@ -23,5 +23,5 @@ public class Role {
     private Auth auth;
 
     @OneToMany(mappedBy = "role")
-    private List<RolePrevilegeAssociation> rolePrevilegeAssociations;
+    private List<RolePermissionAssociation> rolePermissionAssociations;
 }

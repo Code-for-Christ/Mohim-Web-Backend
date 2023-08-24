@@ -2,7 +2,7 @@ package com.mohim.api.service;
 
 import com.mohim.api.domain.Auth;
 import com.mohim.api.domain.Role;
-import com.mohim.api.domain.RolePrevilegeAssociation;
+import com.mohim.api.domain.RolePermissionAssociation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,8 +45,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private List<SimpleGrantedAuthority> getPrivileges(List<Role> roles) {
         return roles.stream()
-                .flatMap(role -> role.getRolePrevilegeAssociations().stream())
-                .map(RolePrevilegeAssociation::getPrevilege)
+                .flatMap(role -> role.getRolePermissionAssociations().stream())
+                .map(RolePermissionAssociation::getPermission)
                 .map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
                 .collect(Collectors.toList());
     }
