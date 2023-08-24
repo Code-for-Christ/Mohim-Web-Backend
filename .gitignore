@@ -36,4 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
+### ENV ###
 /src/main/resources/env.properties
+
+### OS generated ###
+.DS_Store
