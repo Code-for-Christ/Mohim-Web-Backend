@@ -50,7 +50,7 @@ public class Auth implements UserDetails {
     private LocalDateTime deletedAt = LocalDateTime.now(); // 삭제일
 
     @OneToMany(mappedBy = "auth")
-    private List<Role> roles;
+    private List<AuthRoleAssociation> authRoleAssociations;
 
     @Transient
     private List<SimpleGrantedAuthority> authorities;
