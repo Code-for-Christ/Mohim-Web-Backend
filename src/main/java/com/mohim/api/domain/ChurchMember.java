@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ChurchMember {
