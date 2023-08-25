@@ -1,6 +1,7 @@
 package com.mohim.api.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -54,6 +55,19 @@ public class Auth implements UserDetails {
 
     @Transient
     private List<SimpleGrantedAuthority> authorities;
+
+    @Builder
+    public Auth(String email, String hashedPassword) {
+        this.email = email;
+        this.hashedPassword = hashedPassword;
+    }
+
+    public static Auth createAuth(String email, String hashedPassword){
+        return Auth.builder()
+                .email(email)
+                .hashedPassword(hashedPassword)
+                .build();
+    }
 
     public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
         this.authorities = authorities;
