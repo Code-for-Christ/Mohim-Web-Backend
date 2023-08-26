@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtExceptionFilter(), JwtAuthorizationFilter.class) // JWT 관련 예외 처리
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/**", "/docs").permitAll()
                 .anyRequest().authenticated();
 
         return http.build();
