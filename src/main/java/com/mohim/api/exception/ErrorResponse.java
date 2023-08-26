@@ -1,4 +1,4 @@
-package beachcombing.backend.global.config.exception;
+package com.mohim.api.exception;
 
 import lombok.Builder;
 import lombok.Getter;
