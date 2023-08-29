@@ -12,3 +12,6 @@ spring:
       ddl-auto: none
     show-sql: true
     database: mysql
+jwt:
+  secret: ${JWT_SECRET}
+  secret_refresh: ${JWT_SECRET_REFRESH}
