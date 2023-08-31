@@ -1,12 +1,12 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.AuthJoinRequest;
-import com.mohim.api.dto.AuthLoginRequest;
-import com.mohim.api.dto.AuthLoginResponse;
+import com.mohim.api.domain.Auth;
+import com.mohim.api.dto.*;
 import com.mohim.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +30,12 @@ public class AuthController {
     public ResponseEntity<AuthLoginResponse> login(@RequestBody AuthLoginRequest request) {
 
         AuthLoginResponse response =authService.login(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthAuthenticateResponse> authenticate(@AuthenticationPrincipal Auth userDetails, @RequestBody AuthAuthenticateRequest request) {
+        AuthAuthenticateResponse response = authService.authenticate(request, userDetails.getId());
         return ResponseEntity.ok().body(response);
     }
 }
