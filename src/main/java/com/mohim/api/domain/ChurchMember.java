@@ -25,8 +25,9 @@ public class ChurchMember {
 
     private String name;
 
-    @Column(name = "church_id")
-    private Long churchId;
+    @ManyToOne
+    @JoinColumn(name = "church_id")
+    private Church church;
 
     @Column(name = "cell_id")
     private Long cellId;
@@ -81,9 +82,5 @@ public class ChurchMember {
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-    @Column(name = "deleted_at")
-    @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
-    private LocalDateTime deletedAt = LocalDateTime.now();
 
 }
