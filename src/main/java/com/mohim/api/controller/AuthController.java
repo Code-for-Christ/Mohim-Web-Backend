@@ -42,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthRefreshTokenResponse> refreshToken(@AuthenticationPrincipal Auth auth){
+    public ResponseEntity<AuthRefreshTokenResponse> refreshToken(@AuthenticationPrincipal Auth auth) {
         AuthRefreshTokenResponse response = authService.refreshToken(auth);
         return ResponseEntity.ok().body(response);
     }
@@ -50,6 +50,12 @@ public class AuthController {
     @PostMapping("/find-password")
     public ResponseEntity<AuthFindPasswordResponse> findPassword(@RequestBody String email) {
         AuthFindPasswordResponse response = authService.findPassword(email);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<AuthChangePasswordResponse> changePassword(@RequestBody AuthChangePasswordRequest request) {
+        AuthChangePasswordResponse response = authService.changePassword(request);
         return ResponseEntity.ok().body(response);
     }
 }
