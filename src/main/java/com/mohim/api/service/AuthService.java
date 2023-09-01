@@ -8,8 +8,12 @@ import com.mohim.api.repository.AuthRepository;
 import com.mohim.api.repository.ChurchRepository;
 import com.mohim.api.repository.MemberRepository;
 import com.mohim.api.security.JwtTokenProvider;
+import com.mohim.api.util.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +37,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JavaMailSender javaMailSender;
+    private final CodeGenerator codeGenerator;
 
 
 
@@ -127,8 +135,37 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
     public AuthFindPasswordResponse findPassword(String email) {
         Auth auth = authRepository.findByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_EMAIL));
+
+        String temporaryCode = codeGenerator.generateEightCharacterCode();
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(email)
+                .subject("JBCH Phonebook 비밀번호 찾기")
+                .message("임시코드: " + temporaryCode)
+                .build();
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
+            mimeMessageHelper.setSubject(emailMessage.getSubject()); // 메일 제목
+            mimeMessageHelper.setText(emailMessage.getMessage()); // 메일 본문 내용, HTML 여부
+            javaMailSender.send(mimeMessage);
+
+            log.info("Success");
+
+        } catch (MessagingException e) {
+            log.info("fail");
+            throw new RuntimeException(e);
+        }
+
+        auth.setTemporaryCode(temporaryCode);
+        authRepository.save(auth);
+
         return AuthFindPasswordResponse.builder()
                 .message("임시 코드를 성공적으로 발송하였습니다.")
                 .build();
