@@ -170,4 +170,23 @@ public class AuthService {
                 .message("임시 코드를 성공적으로 발송하였습니다.")
                 .build();
     }
+
+    @Transactional
+    public AuthChangePasswordResponse changePassword(AuthChangePasswordRequest request) {
+
+        Auth auth = authRepository.findByEmail(request.getEmail()).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        if (!auth.getTemporaryCode().equals(request.getTemporaryCode())){
+            throw new CustomException(ErrorCode.INVALID_CODE);
+        }
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        auth.setHashedPassword(hashedPassword);
+        auth.setTemporaryCode(null);
+
+        authRepository.save(auth);
+
+        return AuthChangePasswordResponse.builder()
+                .message("비밀번호가 성공적으로 변경되었습니다.")
+                .build();
+    }
 }
