@@ -118,4 +118,19 @@ public class AuthService {
                 .isAuthenticated(isAuthenticated)
                 .build();
     }
+
+    public AuthRefreshTokenResponse refreshToken(Auth authInfo) {
+        String token = jwtTokenProvider.generateAccessToken(authInfo);
+        return AuthRefreshTokenResponse.builder()
+                .accessToken(token)
+                .tokenType("Bearer")
+                .build();
+    }
+
+    public AuthFindPasswordResponse findPassword(String email) {
+        Auth auth = authRepository.findByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_EMAIL));
+        return AuthFindPasswordResponse.builder()
+                .message("임시 코드를 성공적으로 발송하였습니다.")
+                .build();
+    }
 }

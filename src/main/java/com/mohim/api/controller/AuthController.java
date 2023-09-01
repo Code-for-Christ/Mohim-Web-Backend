@@ -31,13 +31,25 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthLoginResponse> login(@RequestBody AuthLoginRequest request) {
 
-        AuthLoginResponse response =authService.login(request);
+        AuthLoginResponse response = authService.login(request);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthAuthenticateResponse> authenticate(@AuthenticationPrincipal Auth userDetails, @RequestBody AuthAuthenticateRequest request) {
         AuthAuthenticateResponse response = authService.authenticate(request, userDetails.getId());
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthRefreshTokenResponse> refreshToken(@AuthenticationPrincipal Auth auth){
+        AuthRefreshTokenResponse response = authService.refreshToken(auth);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/find-password")
+    public ResponseEntity<AuthFindPasswordResponse> findPassword(@RequestBody String email) {
+        AuthFindPasswordResponse response = authService.findPassword(email);
         return ResponseEntity.ok().body(response);
     }
 }
