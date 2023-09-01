@@ -103,4 +103,19 @@ public class AuthService {
 
         return response;
     }
+
+    public AuthAuthenticateResponse getAuthenticationStatus(Auth authInfo) {
+        Auth auth = authRepository.findById(authInfo.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        boolean isAuthenticated = auth.getChurchId() != null && auth.getChurchMemberId() != null;
+
+        return AuthAuthenticateResponse.builder()
+                .email(auth.getEmail())
+                .id(auth.getId())
+                .churchId(auth.getChurchId())
+                .churchMemberId(auth.getChurchMemberId())
+                .isAuthenticated(isAuthenticated)
+                .build();
+    }
 }
