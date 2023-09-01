@@ -189,4 +189,18 @@ public class AuthService {
                 .message("비밀번호가 성공적으로 변경되었습니다.")
                 .build();
     }
+
+    public AuthDeleteUserResponse deleteUser(Auth authInfo, String email) {
+        Auth auth = authRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        if (!authInfo.getEmail().equals(email)){
+            throw new CustomException(ErrorCode.BAD_REQUEST_PARAM);
+        }
+
+        authRepository.delete(auth);
+
+        return AuthDeleteUserResponse.builder()
+                .message("계정이 삭제되었습니다.")
+                .build();
+    }
 }

@@ -58,4 +58,10 @@ public class AuthController {
         AuthChangePasswordResponse response = authService.changePassword(request);
         return ResponseEntity.ok().body(response);
     }
+
+    @DeleteMapping("/users/{user_email}")
+    public ResponseEntity<AuthDeleteUserResponse> deleteUser(@AuthenticationPrincipal Auth auth, @RequestParam(name = "user_email") String email){
+        AuthDeleteUserResponse response = authService.deleteUser(auth, email);
+        return ResponseEntity.ok().body(response);
+    }
 }
