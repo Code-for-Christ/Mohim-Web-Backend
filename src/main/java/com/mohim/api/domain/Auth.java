@@ -43,11 +43,7 @@ public class Auth implements UserDetails {
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now(); // 수정일
-
-    @Column(name = "deleted_at")
-    @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
-    private LocalDateTime deletedAt = LocalDateTime.now(); // 삭제일
-
+    
     @OneToMany(mappedBy = "auth")
     private List<AuthRoleAssociation> authRoleAssociations;
 
