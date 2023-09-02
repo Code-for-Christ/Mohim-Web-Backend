@@ -92,7 +92,9 @@ public class AuthService {
         Auth auth = authRepository.findById(authId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        if (auth.getChurchMemberId() != null || auth.getChurchId() != null) {
+        Optional<Auth> existedAuthorizedUser = authRepository.findByChurchMemberId(churchMember.getId());
+
+        if (existedAuthorizedUser.isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_EXISTS_CHURCH_MEMBER);
         }
 
