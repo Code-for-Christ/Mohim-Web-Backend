@@ -26,7 +26,7 @@ public class Church {
         this.country = country;
     }
 
-    public Church createChurch(String name, String country) {
+    public static Church createChurch(String name, String country) {
         return Church.builder()
                 .name(name)
                 .country(country)
