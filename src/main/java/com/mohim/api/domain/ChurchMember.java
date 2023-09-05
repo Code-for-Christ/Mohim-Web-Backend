@@ -29,14 +29,17 @@ public class ChurchMember {
     @JoinColumn(name = "church_id")
     private Church church;
 
-    @Column(name = "cell_id")
-    private Long cellId;
+    @ManyToOne
+    @JoinColumn(name = "cell_id")
+    private Cell cell;
 
-    @Column(name = "gathering_id")
-    private Long gatheringId;
+    @ManyToOne
+    @JoinColumn(name = "gathering_id")
+    private Gathering gathering;
 
-    @Column(name = "position_id")
-    private Long positionId;
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     @Column(name = "householder_id")
     private Long householderId;
