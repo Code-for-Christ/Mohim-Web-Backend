@@ -26,12 +26,4 @@ public class ChurchController {
         List<ChurchResponse> responses = churchService.getChurchList();
         return ResponseEntity.ok().body(responses);
     }
-
-    @GetMapping("/{church_id}/members")
-    public ResponseEntity<ChurchMembersResponse> getChurchMembers(@PathVariable("church_id") Integer churchId, @ModelAttribute ChurchMembersRequest request, HttpServletRequest httpServletRequest) {
-        System.out.println("request = " + request.getSize());
-        System.out.println("request.getCellId() = " + request.getCellId());
-        ChurchMembersResponse response = churchService.getChurchMembers(churchId, request, httpServletRequest);
-        return ResponseEntity.ok().body(response);
-    }
 }
