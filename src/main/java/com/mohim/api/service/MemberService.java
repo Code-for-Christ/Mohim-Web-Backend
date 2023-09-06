@@ -3,6 +3,7 @@ package com.mohim.api.service;
 import com.mohim.api.domain.ChurchMember;
 import com.mohim.api.dto.ChurchMembersRequest;
 import com.mohim.api.dto.ChurchMembersResponse;
+import com.mohim.api.dto.MinistryRoleResponse;
 import com.mohim.api.repository.MemberRepository;
 import com.mohim.api.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
@@ -74,5 +75,4 @@ public class MemberService {
                 .churchMembers(churchMembers)
                 .build();
     }
-
 }
