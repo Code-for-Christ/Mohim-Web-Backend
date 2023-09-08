@@ -1,9 +1,6 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.ChurchMembersRequest;
-import com.mohim.api.dto.ChurchMembersResponse;
-import com.mohim.api.dto.MinistryRoleResponse;
-import com.mohim.api.dto.ProfileImageUrlResponse;
+import com.mohim.api.dto.*;
 import com.mohim.api.response.MemberResponse;
 import com.mohim.api.service.MemberService;
 import com.mohim.api.service.ProfileImageService;
@@ -34,6 +31,14 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
+    // 특정 멤버 정보 가져오기
+    @GetMapping("/{church_id}/members/{member_id}")
+    public ResponseEntity<ChurchMemberResponse> getChurchMember(@PathVariable("church_id") Integer churchId, @PathVariable("member_id") Integer memberId) {
+        ChurchMemberResponse response = memberService.getChurchMember(churchId, memberId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    // 프로필 이미지 가져오기
     @GetMapping("/{church_id}/members/{member_id}/profile-image-url")
     public ResponseEntity<ProfileImageUrlResponse> getMinistryRole(@PathVariable("church_id") Integer churchId, @PathVariable("member_id") Integer memberId) {
         ProfileImageUrlResponse response = profileImageService.getProfileImageUrl(churchId, memberId);
