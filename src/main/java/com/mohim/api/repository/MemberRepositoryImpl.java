@@ -1,8 +1,10 @@
 package com.mohim.api.repository;
 
 import com.mohim.api.domain.*;
+import com.mohim.api.dto.ChurchMemberResponse;
 import com.mohim.api.dto.ChurchMembersRequest;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -13,6 +15,20 @@ import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mohim.api.domain.QCell.cell1;
+import static com.mohim.api.domain.QChurch.church;
+import static com.mohim.api.domain.QChurchMember.churchMember;
+import static com.mohim.api.domain.QGathering.gathering;
+import static com.mohim.api.domain.QGatheringRole.gatheringRole;
+import static com.mohim.api.domain.QPosition.position;
+import static com.mohim.api.domain.QCellRole.cellRole;
+import static com.mohim.api.domain.QParish.parish;
+import static com.mohim.api.domain.QParishRole.parishRole;
+import static com.mohim.api.domain.QChurchMemberCellRoleAssociation.churchMemberCellRoleAssociation;
+import static com.mohim.api.domain.QChurchMemberParishRoleAssociation.churchMemberParishRoleAssociation;
+import static com.mohim.api.domain.QChurchMemberGatheringRoleAssociation.churchMemberGatheringRoleAssociation;
+
+
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
@@ -20,12 +36,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
     @Override
     public List<ChurchMember> findByChurchId(Integer churchId, ChurchMembersRequest request) {
-        // 필요 QEntity 임포트
-        QChurch church = QChurch.church;
-        QChurchMember churchMember = QChurchMember.churchMember;
-        QCell cell = QCell.cell1;
-        QGathering gathering = QGathering.gathering;
-        QPosition position = QPosition.position;
 
         // 동적 쿼리 설정
         BooleanBuilder builder = new BooleanBuilder();
@@ -39,7 +49,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
             builder.and(churchMember.householderId.eq(Long.valueOf(request.getHouseholderId())));
         }
         if (request.getParish() != null) {
-            builder.and(cell.parish.id.eq(Long.valueOf(request.getParish())));
+            builder.and(cell1.parish.id.eq(Long.valueOf(request.getParish())));
         }
         if (request.getCellId() != null) {
             builder.and(churchMember.cell.id.eq(Long.valueOf(request.getCellId())));
@@ -59,7 +69,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         JPAQuery<ChurchMember> query = jpaQueryFactory.selectFrom(churchMember)
                 .where(builder)
                 .innerJoin(churchMember.church, church)
-                .innerJoin(churchMember.cell, cell)
+                .innerJoin(churchMember.cell, cell1)
                 .innerJoin(churchMember.gathering, gathering)
                 .leftJoin(churchMember.position, position);
 
@@ -93,12 +103,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
     @Override
     public Integer getTotalCount(Integer churchId, ChurchMembersRequest request) {
-        // 필요 QEntity 임포트
-        QChurch church = QChurch.church;
-        QChurchMember churchMember = QChurchMember.churchMember;
-        QCell cell = QCell.cell1;
-        QGathering gathering = QGathering.gathering;
-        QPosition position = QPosition.position;
 
         // 동적 쿼리 설정
         BooleanBuilder builder = new BooleanBuilder();
@@ -112,7 +116,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
             builder.and(churchMember.householderId.eq(Long.valueOf(request.getHouseholderId())));
         }
         if (request.getParish() != null) {
-            builder.and(cell.parish.id.eq(Long.valueOf(request.getParish())));
+            builder.and(cell1.parish.id.eq(Long.valueOf(request.getParish())));
         }
         if (request.getCellId() != null) {
             builder.and(churchMember.cell.id.eq(Long.valueOf(request.getCellId())));
@@ -132,12 +136,19 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         JPAQuery<ChurchMember> query = jpaQueryFactory.selectFrom(churchMember)
                 .where(builder)
                 .innerJoin(churchMember.church, church)
-                .innerJoin(churchMember.cell, cell)
+                .innerJoin(churchMember.cell, cell1)
                 .innerJoin(churchMember.gathering, gathering)
                 .leftJoin(churchMember.position, position);
 
 
         return query.fetch().size();
+    }
+
+    // TODO
+    // Get Church Member API 최적화 리팩토링용 함수
+    @Override
+    public ChurchMemberResponse findByMemberId(Integer memberId, Integer churchId) {
+        return null;
     }
 
     private OrderSpecifier<?> getOrderBySpecifier(PathBuilder<?> churchMemberPath, String orderByField) {
@@ -152,6 +163,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                 return null;
         }
     }
+
+
 }
 
 
