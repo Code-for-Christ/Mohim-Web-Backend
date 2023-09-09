@@ -22,9 +22,9 @@ public class CellService {
         List<Cell> cellList = cellRepository.findAllByChurchId(churchId);
 
         List<CellDTO> cellDTOS = cellList.stream()
-                .map(cell -> cellMapper.toCellDTO(cell))
+                .map(cellMapper::toCellDTO)
                 .collect(Collectors.toList());
 
-        return CellsResponse.builder().cells(cellDTOS).build();
+        return cellMapper.toCellsResponse(cellDTOS);
     }
 }
