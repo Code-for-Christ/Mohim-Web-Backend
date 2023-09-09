@@ -1,7 +1,8 @@
 package com.mohim.api.service;
 
 import com.mohim.api.domain.Cell;
-import com.mohim.api.dto.CellResponse;
+import com.mohim.api.dto.CellDTO;
+import com.mohim.api.dto.CellsResponse;
 import com.mohim.api.mapper.CellMapper;
 import com.mohim.api.repository.CellRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,13 @@ public class CellService {
     private final CellRepository cellRepository;
     private final CellMapper cellMapper;
 
-    public List<CellResponse> getCellList(Long churchId) {
+    public CellsResponse getCellList(Long churchId) {
         List<Cell> cellList = cellRepository.findAllByChurchId(churchId);
 
-        return cellList.stream()
-                .map(cell -> cellMapper.toCellResponse(cell))
+        List<CellDTO> cellDTOS = cellList.stream()
+                .map(cell -> cellMapper.toCellDTO(cell))
                 .collect(Collectors.toList());
+
+        return CellsResponse.builder().cells(cellDTOS).build();
     }
 }
