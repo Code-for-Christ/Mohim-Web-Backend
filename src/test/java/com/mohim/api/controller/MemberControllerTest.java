@@ -1,8 +1,6 @@
 package com.mohim.api.controller;
 
 import com.mohim.api.repository.MemberRepository;
-import com.mohim.api.response.MemberResponse;
-import com.mohim.api.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
