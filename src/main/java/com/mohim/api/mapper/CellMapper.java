@@ -19,7 +19,7 @@ public class CellMapper {
                 .build();
     }
 
-    public CellsResponse toCellResponse(List<CellDTO> cellDTOs) {
+    public CellsResponse toCellsResponse(List<CellDTO> cellDTOs) {
         return CellsResponse.builder()
                 .cells(cellDTOs)
                 .build();
