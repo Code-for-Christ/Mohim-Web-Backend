@@ -1,15 +1,12 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.ChurchMembersRequest;
-import com.mohim.api.dto.ChurchMembersResponse;
-import com.mohim.api.dto.ChurchResponse;
+import com.mohim.api.dto.ChurchesResponse;
 import com.mohim.api.service.ChurchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -22,8 +19,8 @@ public class ChurchController {
 
     // 교회 리스트 가져오기
     @GetMapping("")
-    public ResponseEntity<List<ChurchResponse>> getChurchList() {
-        List<ChurchResponse> responses = churchService.getChurchList();
-        return ResponseEntity.ok().body(responses);
+    public ResponseEntity<ChurchesResponse> getChurchList() {
+        ChurchesResponse response = churchService.getChurchList();
+        return ResponseEntity.ok().body(response);
     }
 }
