@@ -1,6 +1,6 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.CellResponse;
+import com.mohim.api.dto.CellsResponse;
 import com.mohim.api.service.CellService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,8 @@ public class CellController {
 
     // 구역 목록 조회
     @GetMapping("{church_id}/cells")
-    public ResponseEntity<List<CellResponse>> getCellList(@PathVariable(name = "church_id") Long churchId) {
-        List<CellResponse> response = cellService.getCellList(churchId);
+    public ResponseEntity<CellsResponse> getCellList(@PathVariable(name = "church_id") Long churchId) {
+        CellsResponse response = cellService.getCellList(churchId);
         return ResponseEntity.ok().body(response);
     }
 }

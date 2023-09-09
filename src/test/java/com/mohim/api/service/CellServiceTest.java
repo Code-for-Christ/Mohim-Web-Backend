@@ -25,7 +25,7 @@ class CellServiceTest {
         // given
         Long churchId = 1L;
         // then
-        assertThat(cellService.getCellList(churchId).size()).isEqualTo(20);
+        assertThat(cellService.getCellList(churchId).getCells().size()).isEqualTo(20);
     }
 
 }
