@@ -1,7 +1,6 @@
 package com.mohim.api.controller;
 
 import com.mohim.api.dto.*;
-import com.mohim.api.response.MemberResponse;
 import com.mohim.api.service.MemberService;
 import com.mohim.api.service.ProfileImageService;
 import lombok.RequiredArgsConstructor;
