@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ChurchResponse {
+public class ChurchDTO {
     private Long id;
     private String name;
     private String country;
