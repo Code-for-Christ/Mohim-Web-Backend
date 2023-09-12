@@ -8,7 +8,6 @@ import com.mohim.api.dto.MinistryRoleResponse;
 import com.mohim.api.exception.CustomException;
 import com.mohim.api.exception.ErrorCode;
 import com.mohim.api.repository.*;
-import com.mohim.api.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
