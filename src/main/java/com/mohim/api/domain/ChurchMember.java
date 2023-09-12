@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -77,6 +78,9 @@ public class ChurchMember {
     @Column(name = "profile_image_thumbnail")
     @Lob
     private byte[] profileImageThumbnail;
+
+    @OneToMany(mappedBy = "churchMember")
+    private List<ChurchMemberCellRoleAssociation> churchMemberCellRoleAssociations;
 
     @Column(name = "created_at")
     @CreationTimestamp
