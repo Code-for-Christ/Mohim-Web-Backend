@@ -20,4 +20,14 @@ public interface MemberRepository extends JpaRepository<ChurchMember, Long>, Mem
             "AND cr.cell.id = :cellId " +
             "ORDER BY cr.ordinalPosition ASC")
     List<ChurchMember> findChurchMembersByCellIdAndChurchId(@Param("cellId") Long cellId, @Param("churchId") Long churchId);
+
+    @Query("SELECT cm FROM ChurchMember cm " +
+            "INNER JOIN cm.churchMemberGatheringRoleAssociations gra " +
+            "INNER JOIN gra.gatheringRole gr " +
+            "WHERE cm.church.id = :churchId " +
+            "AND gr.gathering.id = :gatheringId " +
+            "ORDER BY gr.ordinalPosition ASC")
+    List<ChurchMember> findChurchMembersByGatheringIdAndChurchId(
+            @Param("gatheringId") Long gatheringId, @Param("churchId") Long churchId
+    );
 }
