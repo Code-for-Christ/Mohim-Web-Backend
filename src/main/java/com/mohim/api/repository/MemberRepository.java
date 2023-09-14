@@ -30,4 +30,14 @@ public interface MemberRepository extends JpaRepository<ChurchMember, Long>, Mem
     List<ChurchMember> findChurchMembersByGatheringIdAndChurchId(
             @Param("gatheringId") Long gatheringId, @Param("churchId") Long churchId
     );
+
+    @Query("SELECT cm FROM ChurchMember cm " +
+            "INNER JOIN cm.churchMemberMinistryRoleAssociations mra " +
+            "INNER JOIN mra.ministryRole mr " +
+            "WHERE cm.church.id = :churchId " +
+            "AND mr.ministry.id = :ministryId " +
+            "ORDER BY mr.ordinalPosition ASC")
+    List<ChurchMember> findChurchMembersByMinistryIdAndChurchId(
+            @Param("ministryId") Long ministryId, @Param("churchId") Long churchId
+    );
 }
