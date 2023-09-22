@@ -10,9 +10,11 @@ import java.util.List;
 @Builder
 @Getter
 public class AuthLoginResponse {
-    private String accessToken;
-
+    private String name;
+    private Long churchId;
+    private String churchName;
+    private Long churchMemberId;
     private String email;
-
-    List<String> role;
+    private List<String> role;
+    private String accessToken;
 }

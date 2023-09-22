@@ -70,6 +70,10 @@ public class AuthService {
         String accessToken = jwtTokenProvider.generateAccessToken(auth.get());
 
         AuthLoginResponse response = AuthLoginResponse.builder()
+                .name(auth.get().getUsername())
+                .churchId(auth.get().getChurch().getId())
+                .churchName(auth.get().getChurch().getName())
+                .churchMemberId(auth.get().getChurchMemberId())
                 .accessToken(accessToken)
                 .email(auth.get().getEmail())
                 .role(auth.get().getAuthRoleAssociations().stream()
@@ -98,7 +102,7 @@ public class AuthService {
             throw new CustomException(ErrorCode.ALREADY_EXISTS_CHURCH_MEMBER);
         }
 
-        auth.setChurchId(church.getId());
+        auth.setChurch(church);
         auth.setChurchMemberId(churchMember.getId());
 
         authRepository.save(auth);
@@ -118,12 +122,12 @@ public class AuthService {
         Auth auth = authRepository.findById(authInfo.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        boolean isAuthenticated = auth.getChurchId() != null && auth.getChurchMemberId() != null;
+        boolean isAuthenticated = auth.getChurch() != null && auth.getChurchMemberId() != null;
 
         return AuthAuthenticateResponse.builder()
                 .email(auth.getEmail())
                 .id(auth.getId())
-                .churchId(auth.getChurchId())
+                .churchId(auth.getChurch().getId())
                 .churchMemberId(auth.getChurchMemberId())
                 .isAuthenticated(isAuthenticated)
                 .build();
