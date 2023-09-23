@@ -30,8 +30,9 @@ public class Auth implements UserDetails {
     @Column(name = "temporary_code")
     private String temporaryCode; // 임시코드
 
-    @Column(name = "church_id")
-    private Long churchId; // 교회 아이디
+    @ManyToOne
+    @JoinColumn(name = "church_id")
+    private Church church;
 
     @Column(name = "church_member_id")
     private Long churchMemberId; // 교회멤버 아이디
