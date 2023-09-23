@@ -40,3 +40,9 @@ cloud:
       static: ${S3_REGION_NAME}
     stack:
       auto: false
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
