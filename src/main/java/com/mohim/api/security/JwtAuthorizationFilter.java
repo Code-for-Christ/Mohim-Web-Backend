@@ -7,6 +7,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -18,14 +20,14 @@ import java.util.Optional;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final AuthRepository authRepository;
+    private final UserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, AuthRepository authRepository, JwtTokenProvider jwtTokenProvider) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
 
         super(authenticationManager);
-        this.authRepository = authRepository;
+        this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -45,8 +47,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (username != null) { // 권한 구분 위해 Authentication 객체를 생성해 세션에 저장
 
-            Auth auth = authRepository.findByEmail(username).orElseThrow();
-            Authentication authentication = new UsernamePasswordAuthenticationToken(auth, null,auth.getAuthorities());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication); // 이때 자동으로 UserDetailsService의 loadByUsername 호출됨
         }
 
