@@ -4,6 +4,7 @@ import com.mohim.api.domain.Auth;
 import com.mohim.api.domain.AuthRoleAssociation;
 import com.mohim.api.domain.Role;
 import com.mohim.api.domain.RolePermissionAssociation;
+import com.mohim.api.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    final private AuthService authService;
+    final private AuthRepository authRepository;
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Auth auth = authService.getUser(email)
+        Auth auth = authRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User is not found. email=" + email));
 
         auth.setAuthorities(
@@ -41,7 +42,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return authRoleAssociations.stream()
                 .map(AuthRoleAssociation::getRole)
                 .map(Role::getName)
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> {
+                    role = "ROLE_"+ role.toUpperCase();
+                    return new SimpleGrantedAuthority(role);
+                })
                 .collect(Collectors.toList());
     }
 
