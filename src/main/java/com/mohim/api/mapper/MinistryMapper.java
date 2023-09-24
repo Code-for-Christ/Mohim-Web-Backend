@@ -51,7 +51,7 @@ public class MinistryMapper {
                 .gatheringName(churchMember.getGathering() != null? churchMember.getGathering().getName() : null)
                 .positionId(churchMember.getPosition() != null ? churchMember.getPosition().getId() : null)
                 .positionName(churchMember.getPosition() != null ? churchMember.getPosition().getName() : null)
-                .ministryId(churchMember.getChurchMemberMinistryRoleAssociations().get(0).getId())
+                .ministryId(churchMember.getChurchMemberMinistryRoleAssociations().get(0).getMinistryRole().getMinistry().getId())
                 .ministryName(churchMember.getChurchMemberMinistryRoleAssociations().get(0).getMinistryRole().getMinistry().getName())
                 .ministryRole(churchMember.getChurchMemberMinistryRoleAssociations().get(0).getMinistryRole().getRole())
                 .build();
