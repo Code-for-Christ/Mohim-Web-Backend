@@ -9,5 +9,5 @@ import java.util.List;
 public interface MemberRepositoryCustom {
     List<ChurchMember> findByChurchId(Integer churchId, ChurchMembersRequest request);
     Integer getTotalCount(Integer churchId, ChurchMembersRequest request);
-    ChurchMemberResponse findByMemberId(Integer memberId, Integer churchId);
+    ChurchMemberResponse findByMemberId(Long memberId, Long churchId);
 }

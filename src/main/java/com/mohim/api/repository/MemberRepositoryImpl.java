@@ -147,7 +147,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     // TODO
     // Get Church Member API 최적화 리팩토링용 함수
     @Override
-    public ChurchMemberResponse findByMemberId(Integer memberId, Integer churchId) {
+    public ChurchMemberResponse findByMemberId(Long memberId, Long churchId) {
         return null;
     }
 
