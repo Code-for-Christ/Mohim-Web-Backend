@@ -68,9 +68,9 @@ public class AuthService {
 
         // 토큰 생성
         String accessToken = jwtTokenProvider.generateAccessToken(auth.get());
-
+        ChurchMember churchMember = memberRepository.findById(auth.get().getChurchMemberId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         AuthLoginResponse response = AuthLoginResponse.builder()
-                .name(auth.get().getUsername())
+                .name(churchMember.getName())
                 .churchId(auth.get().getChurch().getId())
                 .churchName(auth.get().getChurch().getName())
                 .churchMemberId(auth.get().getChurchMemberId())
@@ -79,7 +79,8 @@ public class AuthService {
                 .role(auth.get().getAuthRoleAssociations().stream()
                         .map(AuthRoleAssociation::getRole)
                         .map(Role::getName)
-                        .collect(Collectors.toList()))
+                        .findFirst() // 첫 번째 요소 가져오기
+                        .orElse("")) // 없다면 빈 스트링
                 .build();
 
         return response;
