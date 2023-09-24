@@ -88,6 +88,9 @@ public class ChurchMember {
     @OneToMany(mappedBy = "churchMember")
     private List<ChurchMemberMinistryRoleAssociation> churchMemberMinistryRoleAssociations;
 
+    @OneToMany(mappedBy = "churchMember")
+    private List<ChurchMemberParishRoleAssociation> churchMemberParishRoleAssociations;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
