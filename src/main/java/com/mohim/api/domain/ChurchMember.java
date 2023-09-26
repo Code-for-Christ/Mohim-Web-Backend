@@ -76,8 +76,7 @@ public class ChurchMember {
     private String profileImageName;
 
     @Column(name = "profile_image_thumbnail")
-    @Lob
-    private byte[] profileImageThumbnail;
+    private String profileImageThumbnail;
 
     @OneToMany(mappedBy = "churchMember")
     private List<ChurchMemberCellRoleAssociation> churchMemberCellRoleAssociations;

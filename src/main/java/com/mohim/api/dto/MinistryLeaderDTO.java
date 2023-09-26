@@ -18,7 +18,7 @@ public class MinistryLeaderDTO {
     private String sex;
     private String phoneNumber;
     private String address;
-    private byte[] profileImageThumbnail;
+    private String profileImageThumbnail;
     private Long churchId;
     private String churchName;
     private Long cellId;

@@ -22,7 +22,7 @@ public class ChurchMemberResponse {
     private String sex;
     private String phoneNumber;
     private String address;
-    private byte[] profileImageThumbnail;
+    private String profileImageThumbnail;
     private Long churchId;
     private String churchName;
     private Long cellId;
@@ -46,7 +46,7 @@ public class ChurchMemberResponse {
         private Long householderId;
         private String relationshipWithHouseholder;
         private String phoneNumber;
-        private byte[] profileImageThumbnail;
+        private String profileImageThumbnail;
     }
 
     @Builder
