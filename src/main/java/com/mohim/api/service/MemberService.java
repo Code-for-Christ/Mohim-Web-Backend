@@ -114,6 +114,7 @@ public class MemberService {
         for (MinistryRole ministryRole : ministryRoles){
             for (ChurchMemberResponse.Ministry ministryResponse : ministryResponses) {
                 if (Objects.equals(ministryRole.getMinistry().getId(), ministryResponse.getId())) {
+                    ministryResponse.setRoleId(ministryRole.getId());
                     ministryResponse.setRole(ministryRole.getRole());
                 }
             }

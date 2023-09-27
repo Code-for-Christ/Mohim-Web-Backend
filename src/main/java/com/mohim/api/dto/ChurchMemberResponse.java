@@ -58,6 +58,7 @@ public class ChurchMemberResponse {
     public static class Ministry {
         private Long id;
         private String name;
+        private Long roleId;
         private String role;
     }
 }
