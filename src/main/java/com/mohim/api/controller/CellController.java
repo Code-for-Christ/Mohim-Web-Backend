@@ -1,6 +1,7 @@
 package com.mohim.api.controller;
 
 import com.mohim.api.dto.CellLeadersResponse;
+import com.mohim.api.dto.CellRolesResponse;
 import com.mohim.api.dto.CellsResponse;
 import com.mohim.api.service.CellService;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,9 @@ public class CellController {
         return ResponseEntity.ok().body(response);
     }
 
-
+    @GetMapping("/{church_id}/cell-roles")
+    public ResponseEntity<CellRolesResponse> getCellRoles(@PathVariable("church_id") Long churchId) {
+        CellRolesResponse response = cellService.getCellRoles(churchId);
+        return ResponseEntity.ok().body(response);
+    }
 }

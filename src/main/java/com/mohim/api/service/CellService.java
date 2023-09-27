@@ -2,12 +2,10 @@ package com.mohim.api.service;
 
 import com.mohim.api.domain.Cell;
 import com.mohim.api.domain.ChurchMember;
-import com.mohim.api.dto.CellDTO;
-import com.mohim.api.dto.CellLeaderDTO;
-import com.mohim.api.dto.CellLeadersResponse;
-import com.mohim.api.dto.CellsResponse;
+import com.mohim.api.dto.*;
 import com.mohim.api.mapper.CellMapper;
 import com.mohim.api.repository.CellRepository;
+import com.mohim.api.repository.CellRoleRepository;
 import com.mohim.api.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ public class CellService {
     private final CellRepository cellRepository;
     private final CellMapper cellMapper;
     private final MemberRepository memberRepository;
+    private final CellRoleRepository cellRoleRepository;
 
     public CellsResponse getCellList(Long churchId) {
         List<Cell> cellList = cellRepository.findAllByChurchId(churchId);
@@ -42,5 +41,12 @@ public class CellService {
                 ).collect(Collectors.toList());
 
         return cellMapper.toCellLeadersResponse(cellLeaderDTOS);
+    }
+
+    public CellRolesResponse getCellRoles(Long churchId) {
+        List<CellRoleDTO> cellRoleDTOS = cellRoleRepository.findByChurchId(churchId).stream()
+                .map(cellRole -> CellRoleDTO.from(cellRole))
+                .collect(Collectors.toList());
+        return CellRolesResponse.from(cellRoleDTOS);
     }
 }

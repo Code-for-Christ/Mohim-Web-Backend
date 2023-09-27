@@ -32,8 +32,11 @@ public class ChurchMemberResponse {
     private Long positionId;
     private String positionName;
     private Integer parish;
+    private Long parishRoleId;
     private String parishRole;
+    private Long cellRoleId;
     private String cellRole;
+    private Long gatheringRoleId;
     private String gatheringRole;
     private List<Household> household;
     private List<Ministry> ministries;
@@ -55,6 +58,7 @@ public class ChurchMemberResponse {
     public static class Ministry {
         private Long id;
         private String name;
+        private Long roleId;
         private String role;
     }
 }

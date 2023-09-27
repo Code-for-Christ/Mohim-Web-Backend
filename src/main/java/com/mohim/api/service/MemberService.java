@@ -114,6 +114,7 @@ public class MemberService {
         for (MinistryRole ministryRole : ministryRoles){
             for (ChurchMemberResponse.Ministry ministryResponse : ministryResponses) {
                 if (Objects.equals(ministryRole.getMinistry().getId(), ministryResponse.getId())) {
+                    ministryResponse.setRoleId(ministryRole.getId());
                     ministryResponse.setRole(ministryRole.getRole());
                 }
             }
@@ -157,12 +158,15 @@ public class MemberService {
                 .churchId(churchMember.getChurch().getId())
                 .churchName(churchMember.getChurch().getName())
                 .parish(churchMember.getCell().getParish().getId().intValue())
+                .parishRoleId(churchMemberParishRoleAssociation != null ? churchMemberParishRoleAssociation.getParishRole().getId() : null)
                 .parishRole(churchMemberParishRoleAssociation != null ? churchMemberParishRoleAssociation.getParishRole().getRole() : null)
                 .cellId(churchMember.getCell().getId())
                 .cell(churchMember.getCell().getCell())
+                .cellRoleId(churchMemberCellRoleAssociation != null ? churchMemberCellRoleAssociation.getCellRole().getId() : null)
                 .cellRole(churchMemberCellRoleAssociation != null ? churchMemberCellRoleAssociation.getCellRole().getRole() : null)
                 .gatheringId(churchMember.getGathering().getId())
                 .gatheringName(churchMember.getGathering().getName())
+                .gatheringRoleId(churchMemberGatheringRoleAssociation != null ? churchMemberGatheringRoleAssociation.getGatheringRole().getId() : null)
                 .gatheringRole(churchMemberGatheringRoleAssociation != null ? churchMemberGatheringRoleAssociation.getGatheringRole().getRole() : null)
                 .positionId(churchMember.getPosition() != null ? churchMember.getPosition().getId() : null)
                 .positionName(churchMember.getPosition() != null ? churchMember.getPosition().getName() : null)
