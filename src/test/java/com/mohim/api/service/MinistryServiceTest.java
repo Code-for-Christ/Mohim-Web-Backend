@@ -2,6 +2,7 @@ package com.mohim.api.service;
 
 import com.mohim.api.dto.MinistriesResponse;
 import com.mohim.api.dto.MinistryLeadersResponse;
+import com.mohim.api.dto.MinistryRolesResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,5 +42,18 @@ class MinistryServiceTest {
 
         // then
         Assertions.assertThat(ministryLeaders.getChurchMembers().get(0).getMinistryName()).isEqualTo("교회학교");
+    }
+
+    @Test
+    @DisplayName("봉사 역할 조회")
+    void getMinistryRoles() {
+        //given
+        Long churchId = 1L;
+
+        // when
+        MinistryRolesResponse response = ministryService.getMinistryRoles(churchId);
+
+        // then
+        Assertions.assertThat(response.getMinistryRoles().size()).isEqualTo(49);
     }
 }
