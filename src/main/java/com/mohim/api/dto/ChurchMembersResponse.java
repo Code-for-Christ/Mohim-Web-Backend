@@ -30,6 +30,7 @@ public class ChurchMembersResponse {
         private Long id;
         private String name;
         private Long householderId;
+        private String householderName;
         private String relationshipWithHouseholder;
         private Integer birthYear;
         private Integer salvationYear;
