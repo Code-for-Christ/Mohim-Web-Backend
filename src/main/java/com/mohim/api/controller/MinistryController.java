@@ -1,8 +1,6 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.CellLeadersResponse;
-import com.mohim.api.dto.MinistriesResponse;
-import com.mohim.api.dto.MinistryLeadersResponse;
+import com.mohim.api.dto.*;
 import com.mohim.api.service.MinistryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,4 +28,9 @@ public class MinistryController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/{church_id}/ministry-roles")
+    public ResponseEntity<MinistryRolesResponse> getMinistryRoles(@PathVariable("church_id") Long churchId) {
+        MinistryRolesResponse response = ministryService.getMinistryRoles(churchId);
+        return ResponseEntity.ok().body(response);
+    }
 }
