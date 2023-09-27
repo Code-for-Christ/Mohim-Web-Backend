@@ -1,6 +1,7 @@
 package com.mohim.api.controller;
 
 import com.mohim.api.dto.ParishLeadersResponse;
+import com.mohim.api.dto.ParishRolesResponse;
 import com.mohim.api.dto.ParishesResponse;
 import com.mohim.api.service.ParishService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,12 @@ public class ParishController {
     @GetMapping("/{church_id}/parishes/{parish}/leaders")
     public ResponseEntity<ParishLeadersResponse> getParishLeaders(@PathVariable("church_id") Long churchId, @PathVariable Long parish) {
         ParishLeadersResponse response = parishService.getParishLeaders(churchId, parish);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{church_id}/parish-roles")
+    public ResponseEntity<ParishRolesResponse> getParishRoles(@PathVariable("church_id") Long churchId) {
+        ParishRolesResponse response = parishService.getParishRoles(churchId);
         return ResponseEntity.ok().body(response);
     }
 }
