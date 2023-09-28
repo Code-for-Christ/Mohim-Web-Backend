@@ -1,12 +1,10 @@
 package com.mohim.api.service;
 
 import com.mohim.api.domain.Gathering;
-import com.mohim.api.dto.GatheringDTO;
-import com.mohim.api.dto.GatheringLeaderDTO;
-import com.mohim.api.dto.GatheringLeadersResponse;
-import com.mohim.api.dto.GatheringsResponse;
+import com.mohim.api.dto.*;
 import com.mohim.api.mapper.GatheringMapper;
 import com.mohim.api.repository.GatheringRepository;
+import com.mohim.api.repository.GatheringRoleRepository;
 import com.mohim.api.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ public class GatheringService {
     private final GatheringRepository gatheringRepository;
     private final MemberRepository memberRepository;
     private final GatheringMapper gatheringMapper;
+    private final GatheringRoleRepository gatheringRoleRepository;
 
     public GatheringsResponse getGatheringList(Long churchId) {
         List<GatheringDTO> gatheringDTOS = gatheringRepository.findByChurchId(churchId).stream()
@@ -40,5 +39,13 @@ public class GatheringService {
                 .collect(Collectors.toList());
 
         return gatheringMapper.toGatheringLeadersResponse(gatheringLeaderDTOS);
+    }
+
+    public GatheringRolesResponse getGatheringRoles(Long churchId) {
+        List<GatheringRoleDTO> gatheringRoleDTOS = gatheringRoleRepository.findByChurchId(churchId).stream()
+                .map(gatheringRole -> GatheringRoleDTO.from(gatheringRole))
+                .collect(Collectors.toList());
+
+        return GatheringRolesResponse.from(gatheringRoleDTOS);
     }
 }

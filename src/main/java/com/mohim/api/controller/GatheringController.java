@@ -1,8 +1,6 @@
 package com.mohim.api.controller;
 
-import com.mohim.api.dto.GatheringDTO;
-import com.mohim.api.dto.GatheringLeadersResponse;
-import com.mohim.api.dto.GatheringsResponse;
+import com.mohim.api.dto.*;
 import com.mohim.api.service.GatheringService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +25,12 @@ public class GatheringController {
     @GetMapping("/{church_id}/gatherings/{gathering_id}/leaders")
     public ResponseEntity<GatheringLeadersResponse> getGatheringLeaders(@PathVariable("church_id") Long churchId, @PathVariable("gathering_id") Long gatheringId) {
         GatheringLeadersResponse response = gatheringService.getGatheringLeaders(churchId, gatheringId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{church_id}/gathering-roles")
+    public ResponseEntity<GatheringRolesResponse> getGatheringRoles(@PathVariable("church_id") Long churchId) {
+        GatheringRolesResponse response = gatheringService.getGatheringRoles(churchId);
         return ResponseEntity.ok().body(response);
     }
 }
