@@ -6,13 +6,11 @@ import com.mohim.api.service.ProfileImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Member;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,4 +41,11 @@ public class MemberController {
         ProfileImageUrlResponse response = profileImageService.getProfileImageUrl(churchId, memberId);
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/{church_id}/church-members/{church_member_id}")
+    public ResponseEntity<Void> updateChurchMember(@PathVariable("church_id") Long churchId, @PathVariable("church_member_id") Long memberId, @Valid UpdateChurchMemberRequest request) throws IOException {
+        memberService.updateChurchMember(churchId, memberId, request);
+        return ResponseEntity.ok().build();
+    }
+
 }
