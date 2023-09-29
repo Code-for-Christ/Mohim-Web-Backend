@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ChurchMember {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -97,5 +96,35 @@ public class ChurchMember {
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now();
+    public void updateChurchMember(String name, Cell cell, Gathering gathering, Position position, Long householderId, String relationshipWithHouseHolder, Integer birthYear, Integer salvationYear, Integer salvationMonth, Integer salvationDay, String carNumber, Gender gender, String phoneNumber, String address) {
+        this.name = name;
+        this.cell = cell;
+        this.gathering = gathering;
+        this.position = position;
+        this.householderId = householderId;
+        this.relationshipWithHouseHolder = relationshipWithHouseHolder;
+        this.birthYear = birthYear;
+        this.salvationYear = salvationYear;
+        this.salvationMonth = salvationMonth;
+        this.salvationDay = salvationDay;
+        this.carNumber = carNumber;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.profileImageName = profileImageName;
+        this.profileImageThumbnail = profileImageThumbnail;
+    }
+
+    public void updateProfileImageThumbnail(String profileImageThumbnail) {
+        this.profileImageThumbnail = profileImageThumbnail;
+    }
+
+    public void updateProfileImageName(String profileImageName) {
+        this.profileImageName = profileImageName;
+    }
+
+    public void updateAddress(String address) {
+        this.address = address;
+    }
 
 }
