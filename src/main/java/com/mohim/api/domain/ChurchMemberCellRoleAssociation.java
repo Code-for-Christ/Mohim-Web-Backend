@@ -1,8 +1,8 @@
 package com.mohim.api.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -21,4 +21,18 @@ public class ChurchMemberCellRoleAssociation {
     @ManyToOne
     @JoinColumn(name = "cell_role_id")
     private CellRole cellRole;
+
+    @Builder
+    public ChurchMemberCellRoleAssociation(ChurchMember churchMember, CellRole cellRole) {
+        this.churchMember = churchMember;
+        this.cellRole = cellRole;
+    }
+
+    public static ChurchMemberCellRoleAssociation createChurchMemberCellRoleAssociation(ChurchMember churchMember, CellRole cellRole) {
+        return ChurchMemberCellRoleAssociation.builder()
+                .churchMember(churchMember)
+                .cellRole(cellRole)
+                .build();
+    }
+
 }
