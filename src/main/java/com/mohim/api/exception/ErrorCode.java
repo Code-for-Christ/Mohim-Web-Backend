@@ -26,36 +26,36 @@ public enum ErrorCode {
 
     //PROFILE_IMAGE 예외
     NOT_FOUND_PROFILE_IMAGE(HttpStatus.NOT_FOUND, "등록된 프로필 이미지가 없습니다."),
-    INVALID_EXTENSION(HttpStatus.NOT_FOUND, "유효하지 않는 확장자 입니다."),
+    INVALID_EXTENSION(HttpStatus.BAD_REQUEST, "유효하지 않는 확장자 입니다."),
     UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드에 실패했습니다."),
 
     // POSITION 예외
-    NOT_FOUND_POSITION(HttpStatus.BAD_REQUEST, "존재하지 않는 전도인 역할입니다."),
+    NOT_FOUND_POSITION(HttpStatus.NOT_FOUND, "존재하지 않는 직분입니다."),
 
     // PARISH 예외
-    NOT_FOUND_PARISH(HttpStatus.BAD_REQUEST, "존재하지 않는 교구입니다."),
+    NOT_FOUND_PARISH(HttpStatus.NOT_FOUND, "존재하지 않는 교구입니다."),
     INVALID_PARISH_OR_CELL(HttpStatus.BAD_REQUEST, "유효하지 않은 교구 혹은 구역입니다."),
 
     // PARISH_ROLE 예외
-    NOT_FOUND_PARISH_ROLE(HttpStatus.BAD_REQUEST, "존재하지 않는 교구역할입니다."),
+    NOT_FOUND_PARISH_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 교구역할입니다."),
 
     // CELL 예외
-    NOT_FOUND_CELL(HttpStatus.BAD_REQUEST, "존재하지 않는 구역입니다."),
+    NOT_FOUND_CELL(HttpStatus.NOT_FOUND, "존재하지 않는 구역입니다."),
 
     // CELL_ROLE 예외
-    NOT_FOUND_CELL_ROLE(HttpStatus.BAD_REQUEST, "존재하지 않는 구역역할입니다."),
+    NOT_FOUND_CELL_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 구역역할입니다."),
 
     // GATHERING 예외
-    NOT_FOUND_GATHERING(HttpStatus.BAD_REQUEST, "존재하지 않는 회(모임)입니다."),
+    NOT_FOUND_GATHERING(HttpStatus.NOT_FOUND, "존재하지 않는 회(모임)입니다."),
 
     // GATHERING_ROLE 예외
-    NOT_FOUND_GATHERING_ROLE(HttpStatus.BAD_REQUEST, "존재하지 않는 회별역할입니다."),
+    NOT_FOUND_GATHERING_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 회별역할입니다."),
 
     // MINISTRY 예외
-    NOT_FOUND_MINISTRY(HttpStatus.BAD_REQUEST, "존재하지 않는 봉사입니다."),
+    NOT_FOUND_MINISTRY(HttpStatus.NOT_FOUND, "존재하지 않는 봉사입니다."),
 
     // MINISTRY_ROLE 예외
-    NOT_FOUND_MINISTRY_ROLE(HttpStatus.BAD_REQUEST, "존재하지 않는 봉사역할입니다."),
+    NOT_FOUND_MINISTRY_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 봉사역할입니다."),
     ;
     private final HttpStatus status;
     private final String error;
