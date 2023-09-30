@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ChurchMemberMinistryAssociationRepository extends JpaRepository<ChurchMemberMinistryAssociation, Long> {
     List<ChurchMemberMinistryAssociation> findAllByChurchMember(ChurchMember churchMember);
+
+    void deleteAllByChurchMemberId(Long churchMemberId);
 }

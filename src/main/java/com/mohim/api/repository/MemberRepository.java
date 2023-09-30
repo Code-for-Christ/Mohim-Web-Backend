@@ -12,7 +12,7 @@ public interface MemberRepository extends JpaRepository<ChurchMember, Long>, Mem
 
     Optional<ChurchMember> findByNameAndPhoneNumber(String name, String phoneNumber);
     Optional<ChurchMember> findByIdAndChurchId(Long id, Long churchId);
-    List<ChurchMember> findAllByHouseholderId(Long householderId);
+    List<ChurchMember> findAllByChurchIdAndHouseholderId(Long church_id, Long householderId);
     @Query("SELECT cm FROM ChurchMember cm " +
             "INNER JOIN cm.churchMemberCellRoleAssociations cra " +
             "INNER JOIN cra.cellRole cr " +

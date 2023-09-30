@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface ParishRepository extends JpaRepository<Parish, Long> {
     List<Parish> findByChurchId(Long church_id);
+
+    Optional<Parish> findByChurchIdAndId(Long churchId, Long id);
 }
