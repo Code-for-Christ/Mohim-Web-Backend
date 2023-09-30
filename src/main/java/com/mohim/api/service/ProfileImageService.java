@@ -69,23 +69,24 @@ public class ProfileImageService {
 
         // 3-3. 업로드
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            String key = churchMember.getChurch().getId() + profileImageName + "." + fileType;
-            amazonS3.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)); // 이미지 업로드 확인용 퍼블릭 이미지 액세스 허용 옵션 추가
+            String key = churchMember.getChurch().getId() + "/" + profileImageName + "." + fileType;
+            amazonS3.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata));
         } catch (IOException e) {
             log.error("S3 파일 업로드에 실패했습니다. {}", e.getMessage());
             throw new CustomException(ErrorCode.UPLOAD_FAILED); // 파일 업로드 실패 에러를 던짐}
         }
 
         // 4. 새로운 프로필 이미지 DB 반영
-        churchMember.updateProfileImageName(profileImageName);
+        churchMember.updateProfileImageName(profileImageName + "." + fileType);
         // 5. 썸네일 이미지 DB 반영
         churchMember.updateProfileImageThumbnail(thumbnail);
 
         // 6. 기존 프로필 이미지 삭제
-        if (profileImageToBeDeleted != null) {
-            String key = churchMember.getChurch().getId() + profileImageToBeDeleted;
-            amazonS3.deleteObject(bucket, key);
-        }
+        // TODO TEST 시 주석 처리
+//        if (profileImageToBeDeleted != null) {
+//            String key = churchMember.getChurch().getId() + "/" + profileImageToBeDeleted;
+//            amazonS3.deleteObject(bucket, key);
+//        }
     }
 
     private String createThumbnail(MultipartFile file, String fileType) throws IOException {
