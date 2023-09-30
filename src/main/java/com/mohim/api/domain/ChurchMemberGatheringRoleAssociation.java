@@ -35,4 +35,8 @@ public class ChurchMemberGatheringRoleAssociation {
                 .gatheringRole(gatheringRole)
                 .build();
     }
+
+    public void updateGatheringRole(GatheringRole gatheringRole) {
+        this.gatheringRole = gatheringRole;
+    }
 }

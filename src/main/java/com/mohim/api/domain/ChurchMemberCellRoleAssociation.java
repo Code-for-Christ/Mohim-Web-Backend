@@ -35,4 +35,7 @@ public class ChurchMemberCellRoleAssociation {
                 .build();
     }
 
+    public void updateCellRole(CellRole cellRole) {
+        this.cellRole = cellRole;
+    }
 }

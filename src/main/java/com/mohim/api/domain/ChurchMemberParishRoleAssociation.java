@@ -35,4 +35,8 @@ public class ChurchMemberParishRoleAssociation {
                 .parishRole(parishRole)
                 .build();
     }
+
+    public void updateParishRole(ParishRole parishRole) {
+        this.parishRole = parishRole;
+    }
 }
