@@ -40,7 +40,7 @@ public class UpdateChurchMemberRequest {
     private Long gatheringId;
     private Long gatheringRoleId;
     private Long positionId;
-    private List<MinistryDTO> ministries;
+    private String ministries;
 
     @Getter
     @Setter
