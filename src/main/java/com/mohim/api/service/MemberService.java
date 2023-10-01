@@ -320,9 +320,14 @@ public class MemberService {
         // 세대주 주소 변경 여부 확인 및 변경
         // TODO householdId가 있다면 새로 업데이트, 없다면 자기로 getUpdateHouseholdAddress 여부에 따라 세대원 주소 바꾸는 것도 고려
         // TODO
-        Long updatedHouseholderId = churchMember.getHouseholderId();
+        Long updatedHouseholderId = null;
+
+        // HouseholderId 가 존재할 경우 업데이트
         if (request.getHouseholderId() != null) {
             updatedHouseholderId = request.getHouseholderId();
+        } else { // 없을 경우, 자기 자신
+            updatedHouseholderId = churchMember.getId();
+            request.setRelationshipWithHouseholder("본인");
         }
 
         List<ChurchMember> churchMembers = new ArrayList<>();
