@@ -209,53 +209,82 @@ public class MemberService {
 
         // 회(모임) 검증 및 가져오기
         Gathering updatedGathering = gatheringRepository.findByChurchIdAndId(churchId, request.getGatheringId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_GATHERING));
-        // 직분 가져오기
-        Position updatedPosition = positionRepository.findByChurchIdAndId(churchId, request.getPositionId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POSITION));
+        Position updatedPosition = churchMember.getPosition();
+        if (request.getPositionId() != null) {
+            // 직분 가져오기
+            updatedPosition = positionRepository.findByChurchIdAndId(churchId, request.getPositionId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POSITION));
+        } else {
+            updatedPosition = null;
+        }
 
         // 교구 역할 검증 및 추가
         // TODO churchId 추가 finished
         // TODO 가지고 있는 역할이 있는지 확인 먼저 해야함 있으면 수정 없다면 추가
-        // 요청한 parishRole 이 있는지 검증
-        ParishRole parishRole = parishRoleRepository.findByChurchIdAndId(churchId, request.getParishRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PARISH_ROLE));
-        // 요청한 멤버의 기존 parishRole 이 있는지 조회
-        ChurchMemberParishRoleAssociation churchMemberParishRoleAssociation = churchMemberParishRoleAssociationRepository.findByChurchMember(churchMember);
+        if (request.getParishRoleId() != null) {
+            // 요청한 parishRole 이 있는지 검증
+            ParishRole parishRole = parishRoleRepository.findByChurchIdAndId(churchId, request.getParishRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PARISH_ROLE));
+            // 요청한 멤버의 기존 parishRole 이 있는지 조회
+            ChurchMemberParishRoleAssociation churchMemberParishRoleAssociation = churchMemberParishRoleAssociationRepository.findByChurchMember(churchMember);
 
-        if (churchMemberParishRoleAssociation == null) { // 없다면 새로 생성
-            ChurchMemberParishRoleAssociation createdAssociation = ChurchMemberParishRoleAssociation.createChurchMemberParishRoleAssociation(churchMember, parishRole);
-            churchMemberParishRoleAssociationRepository.save(createdAssociation);
-        } else { // 있다면 수정
-            churchMemberParishRoleAssociation.updateParishRole(parishRole);
-            churchMemberParishRoleAssociationRepository.save(churchMemberParishRoleAssociation);
+            if (churchMemberParishRoleAssociation == null) { // 없다면 새로 생성
+                ChurchMemberParishRoleAssociation createdAssociation = ChurchMemberParishRoleAssociation.createChurchMemberParishRoleAssociation(churchMember, parishRole);
+                churchMemberParishRoleAssociationRepository.save(createdAssociation);
+            } else { // 있다면 수정
+                churchMemberParishRoleAssociation.updateParishRole(parishRole);
+                churchMemberParishRoleAssociationRepository.save(churchMemberParishRoleAssociation);
+            }
+        } else {
+            // 요청한 역할id가 없을 경우 기존 역할 정보가 있다면 삭제
+            ChurchMemberParishRoleAssociation churchMemberParishRoleAssociation = churchMemberParishRoleAssociationRepository.findByChurchMember(churchMember);
+            if (churchMemberParishRoleAssociation != null) {
+                churchMemberParishRoleAssociationRepository.delete(churchMemberParishRoleAssociation);
+            }
         }
+
 
         // 구역 역할 검증 및 추가
         // TODO churchId 추가 finished
         // TODO 가지고 있는 역할이 있는지 확인 먼저 해야함 있으면 수정 없다면 추가
-        // 요청한 cellRole 존재 검증
-        CellRole cellRole = cellRoleRepository.findByChurchIdAndId(churchId, request.getCellRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CELL_ROLE));
-        // 요청한 멤버의 기존 cellRole 여부 조회
-        ChurchMemberCellRoleAssociation churchMemberCellRoleAssociation = churchMemberCellRoleAssociationRepository.findByChurchMember(churchMember);
-        if (churchMemberCellRoleAssociation == null) {
-            ChurchMemberCellRoleAssociation createdAssociation = ChurchMemberCellRoleAssociation.createChurchMemberCellRoleAssociation(churchMember, cellRole);
-            churchMemberCellRoleAssociationRepository.save(createdAssociation);
+        if (request.getCellRoleId() != null) {
+            // 요청한 cellRole 존재 검증
+            CellRole cellRole = cellRoleRepository.findByChurchIdAndId(churchId, request.getCellRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CELL_ROLE));
+            // 요청한 멤버의 기존 cellRole 여부 조회
+            ChurchMemberCellRoleAssociation churchMemberCellRoleAssociation = churchMemberCellRoleAssociationRepository.findByChurchMember(churchMember);
+            if (churchMemberCellRoleAssociation == null) {
+                ChurchMemberCellRoleAssociation createdAssociation = ChurchMemberCellRoleAssociation.createChurchMemberCellRoleAssociation(churchMember, cellRole);
+                churchMemberCellRoleAssociationRepository.save(createdAssociation);
+            } else {
+                churchMemberCellRoleAssociation.updateCellRole(cellRole);
+                churchMemberCellRoleAssociationRepository.save(churchMemberCellRoleAssociation);
+            }
         } else {
-            churchMemberCellRoleAssociation.updateCellRole(cellRole);
-            churchMemberCellRoleAssociationRepository.save(churchMemberCellRoleAssociation);
+            // 요청한 역할id가 없을 경우 기존 역할 정보가 있다면 삭제
+            ChurchMemberCellRoleAssociation churchMemberCellRoleAssociation = churchMemberCellRoleAssociationRepository.findByChurchMember(churchMember);
+            if (churchMemberCellRoleAssociation != null) {
+                churchMemberCellRoleAssociationRepository.delete(churchMemberCellRoleAssociation);
+            }
         }
 
         // 회별 역할 검증 및 추가
         // TODO churchId 추가
         // TODO 가지고 있는 역할이 있는지 확인 먼저 해야함 있으면 수정 없다면 추가
-        // gatheringRole 검증
-        GatheringRole gatheringRole = gatheringRoleRepository.findByChurchIdAndId(churchId, request.getGatheringRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_GATHERING_ROLE));
-        // 요청 멤버의 기존 회별 역할 여부 조회
-        ChurchMemberGatheringRoleAssociation churchMemberGatheringRoleAssociation = churchMemberGatheringRoleAssociationRepository.findByChurchMember(churchMember);
-        if (churchMemberGatheringRoleAssociation == null) {
-            ChurchMemberGatheringRoleAssociation createdAssociation = ChurchMemberGatheringRoleAssociation.createChurchMemberGatheringRoleAssociation(churchMember, gatheringRole);
-            churchMemberGatheringRoleAssociationRepository.save(createdAssociation);
+        if (request.getGatheringRoleId() != null) {
+            // gatheringRole 검증
+            GatheringRole gatheringRole = gatheringRoleRepository.findByChurchIdAndId(churchId, request.getGatheringRoleId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_GATHERING_ROLE));
+            // 요청 멤버의 기존 회별 역할 여부 조회
+            ChurchMemberGatheringRoleAssociation churchMemberGatheringRoleAssociation = churchMemberGatheringRoleAssociationRepository.findByChurchMember(churchMember);
+            if (churchMemberGatheringRoleAssociation == null) {
+                ChurchMemberGatheringRoleAssociation createdAssociation = ChurchMemberGatheringRoleAssociation.createChurchMemberGatheringRoleAssociation(churchMember, gatheringRole);
+                churchMemberGatheringRoleAssociationRepository.save(createdAssociation);
+            } else {
+                churchMemberGatheringRoleAssociation.updateGatheringRole(gatheringRole);
+                churchMemberGatheringRoleAssociationRepository.save(churchMemberGatheringRoleAssociation);
+            }
         } else {
-            churchMemberGatheringRoleAssociation.updateGatheringRole(gatheringRole);
-            churchMemberGatheringRoleAssociationRepository.save(churchMemberGatheringRoleAssociation);
+            ChurchMemberGatheringRoleAssociation churchMemberGatheringRoleAssociation = churchMemberGatheringRoleAssociationRepository.findByChurchMember(churchMember);
+            if (churchMemberGatheringRoleAssociation != null) {
+                churchMemberGatheringRoleAssociationRepository.delete(churchMemberGatheringRoleAssociation);
+            }
         }
 
         // 봉사 및 봉사 역할 검증 및 추가
