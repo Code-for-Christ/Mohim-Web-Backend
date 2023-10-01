@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Transactional
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -189,7 +191,6 @@ public class MemberService {
                 .build();
     }
 
-    @Transactional
     public UpdateChurchMemberResponse updateChurchMember(Long churchId, Long memberId, UpdateChurchMemberRequest request) throws IOException {
 
         // 멤버 검증 및 가져오기
@@ -327,7 +328,7 @@ public class MemberService {
         churchMembers.add(churchMember);
 
         // 파일 타입 검증
-        if (!request.getProfileImage().isEmpty()) {
+        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
             String[] fileNames = request.getProfileImage().getOriginalFilename().split("\\.");
             String fileType = fileNames[fileNames.length - 1];
 
