@@ -23,9 +23,7 @@ public class UpdateChurchMemberRequest {
     private Integer salvationMonth;
     private Integer salvationDay;
     private MultipartFile profileImage;
-    @NotNull
     private Long householderId;
-    @NotNull
     private String relationshipWithHouseholder;
     private String address;
     @NotNull
