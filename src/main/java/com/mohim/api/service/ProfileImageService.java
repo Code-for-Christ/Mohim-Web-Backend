@@ -89,6 +89,21 @@ public class ProfileImageService {
 //        }
     }
 
+    public void deleteProfileImage(ChurchMember churchMember) {
+        String profileImageToBeDeleted = churchMember.getProfileImageName();
+
+        if (profileImageToBeDeleted != null) {
+            // 기존 프로필 이미지 삭제
+            churchMember.updateProfileImageName(null);
+            // 기존 썸네일 삭제
+            churchMember.updateProfileImageThumbnail(null);
+
+            // s3 삭제
+            String key = churchMember.getChurch().getId() + "/" + profileImageToBeDeleted;
+            amazonS3.deleteObject(bucket, key);
+        }
+    }
+
     private String createThumbnail(MultipartFile file, String fileType) throws IOException {
         try {
             // MultipartFile에서 이미지 데이터 읽기

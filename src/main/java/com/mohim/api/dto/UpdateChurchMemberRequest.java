@@ -23,6 +23,7 @@ public class UpdateChurchMemberRequest {
     private Integer salvationMonth;
     private Integer salvationDay;
     private MultipartFile profileImage;
+    private Boolean deleteProfileImage;
     private Long householderId;
     private String relationshipWithHouseholder;
     private String address;

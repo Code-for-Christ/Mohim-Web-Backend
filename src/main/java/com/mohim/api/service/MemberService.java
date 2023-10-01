@@ -356,15 +356,17 @@ public class MemberService {
                 );
         churchMembers.add(churchMember);
 
-        // 파일 타입 검증
-        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
+        // profileImage != "" && deleteProfileImage: false
+        // -> 새로운 프로필사진으로 업데이트
+        if (request.getProfileImage() != null && !request.getDeleteProfileImage()) {
+            // 파일 타입 검증
             String[] fileNames = request.getProfileImage().getOriginalFilename().split("\\.");
             String fileType = fileNames[fileNames.length - 1];
 
             boolean isAllowedExtension = false;
 
             for (String extension : ALLOWED_EXTENSIONS) {
-                if (fileType.equalsIgnoreCase(extension)){
+                if (fileType.equalsIgnoreCase(extension)) {
                     isAllowedExtension = true;
                     break;
                 }
@@ -376,6 +378,12 @@ public class MemberService {
             // 이미지 업로드
             profileImageService.uploadProfileImage(churchMember, request.getProfileImage(), fileType);
         }
+        // profileImage =="" && deleteProfileImage: true
+        // -> 기존 프로필사진이 존재한다면 삭제 (아예 프로필사진이 존재하지 않는 경우도 포함)
+        else if (request.getProfileImage() == null && request.getDeleteProfileImage()) {
+            profileImageService.deleteProfileImage(churchMember);
+        }
+        // 위 두 경우가 아닐 경우에는 profileImage =="" && deleteProfileImage: false -> 기존 프로필사진 그대로 유지
 
         // 커밋
         memberRepository.saveAll(churchMembers);
