@@ -49,8 +49,8 @@ public class MemberController {
     // TODO churchMember id return finished
     @PutMapping("/{church_id}/church-members/{church_member_id}")
     public ResponseEntity<UpdateChurchMemberResponse> updateChurchMember(@PathVariable("church_id") Long churchId, @PathVariable("church_member_id") Long memberId, @Valid UpdateChurchMemberRequest request) throws IOException {
-        memberService.updateChurchMember(churchId, memberId, request);
-        return ResponseEntity.ok().build();
+        UpdateChurchMemberResponse response = memberService.updateChurchMember(churchId, memberId, request);
+        return ResponseEntity.ok().body(response);
     }
 
 }
