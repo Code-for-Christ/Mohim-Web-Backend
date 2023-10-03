@@ -1,6 +1,8 @@
 package com.mohim.api.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.mohim.api.domain.ChurchMember;
@@ -21,7 +23,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Base64;
+import java.util.Date;
 import java.util.UUID;
 
 @Slf4j
@@ -37,18 +41,38 @@ public class ProfileImageService {
     private String bucket;
 
 
-    public ProfileImageUrlResponse getProfileImageUrl(Integer churchId, Integer memberId) {
-        ChurchMember churchMember = memberRepository.findByIdAndChurchId(Long.valueOf(memberId), Long.valueOf(churchId)).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER));
+    public String getProfileImageUrl(Long churchId, Long memberId) {
+        ChurchMember churchMember = memberRepository.findByIdAndChurchId(memberId, churchId).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        String imageUrl = amazonS3.getUrl(bucket, churchMember.getProfileImageName()).toString();
+        String preSignedURL = "";
+        String fileName = churchMember.getProfileImageName();
 
-        if (!imageUrl.contains(".jpg")) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PROFILE_IMAGE);
+        if (fileName == null) {
+            return null;
         }
 
-        return ProfileImageUrlResponse.builder()
-                .profileImageUrl(imageUrl)
-                .build();
+        Date expiration = new Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * 2;
+        expiration.setTime(expTimeMillis);
+
+        log.info(expiration.toString());
+
+        try {
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(bucket, fileName)
+                            .withMethod(HttpMethod.GET)
+                            .withExpiration(expiration)
+                            .withKey(churchId + "/" + fileName);
+            URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+            preSignedURL = url.toString();
+            log.info("Pre-Signed URL : " + url.toString());
+
+        } catch (Exception e) {
+            log.error("URL 가져오기 실패 : " + e);
+        }
+
+        return preSignedURL;
     }
 
     public void uploadProfileImage(ChurchMember churchMember, MultipartFile multipartFile, String fileType) throws IOException {
