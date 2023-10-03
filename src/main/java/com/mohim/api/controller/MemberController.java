@@ -44,15 +44,21 @@ public class MemberController {
 
     // 프로필 이미지 가져오기
     @GetMapping("/{church_id}/members/{member_id}/profile-image-url")
-    public ResponseEntity<ProfileImageUrlResponse> getMinistryRole(@PathVariable("church_id") Integer churchId, @PathVariable("member_id") Integer memberId) {
-        ProfileImageUrlResponse response = profileImageService.getProfileImageUrl(churchId, memberId);
+    public ResponseEntity<ProfileImageUrlResponse> getProfileImageUrl(@PathVariable("church_id") Long churchId, @PathVariable("member_id") Long memberId) {
+        ProfileImageUrlResponse response = memberService.getProfileImageUrl(churchId, memberId);
         return ResponseEntity.ok().body(response);
     }
 
     // TODO churchMember id return finished
-    @PutMapping("/{church_id}/church-members/{church_member_id}")
+    @PutMapping("/{church_id}/members/{church_member_id}")
     public ResponseEntity<UpdateChurchMemberResponse> updateChurchMember(@PathVariable("church_id") Long churchId, @PathVariable("church_member_id") Long memberId, @ModelAttribute @Valid UpdateChurchMemberRequest request) throws IOException {
         UpdateChurchMemberResponse response = memberService.updateChurchMember(churchId, memberId, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/{church_id}/members")
+    public ResponseEntity<SaveChurchMemberResponse> saveChurchMember(@PathVariable("church_id") Long churchId, @Valid SaveChurchMemberRequest request) throws IOException {
+        SaveChurchMemberResponse response = memberService.saveChurchMember(churchId, request);
         return ResponseEntity.ok().body(response);
     }
 
@@ -69,6 +75,4 @@ public class MemberController {
 
         });
     }
-
-
 }
