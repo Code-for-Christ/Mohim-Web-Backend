@@ -133,9 +133,30 @@ public class ProfileImageService {
             // MultipartFile에서 이미지 데이터 읽기
             BufferedImage originalImage = ImageIO.read(file.getInputStream());
 
-            // 이미지를 250x250 크기로 조정
-            int thumbnailWidth = 250;
-            int thumbnailHeight = 250;
+            // 원본 이미지의 가로와 세로 크기
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+
+            // 원본 이미지의 가로와 세로 비율 계산
+            double aspectRatio = (double) originalWidth / originalHeight;
+
+            // 썸네일의 크기 설정
+            int thumbnailWidth;
+            int thumbnailHeight;
+
+            // 가로가 세로보다 긴 경우
+            if (originalWidth > originalHeight) {
+                thumbnailWidth = 250;
+                thumbnailHeight = (int) (thumbnailWidth / aspectRatio);
+            } else { // 세로가 가로보다 긴 경우
+                thumbnailHeight = 250;
+                thumbnailWidth = (int) (thumbnailHeight * aspectRatio);
+            }
+
+
+//            // 이미지를 250x250 크기로 조정
+//            int thumbnailWidth = 250;
+//            int thumbnailHeight = 250;
             BufferedImage thumbnail = new BufferedImage(thumbnailWidth, thumbnailHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = thumbnail.createGraphics();
             graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
