@@ -26,7 +26,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final ProfileImageService profileImageService;
 
     // 교회 멤버 가져오기
     @GetMapping("/{church_id}/members")
