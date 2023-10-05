@@ -26,7 +26,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final ProfileImageService profileImageService;
 
     // 교회 멤버 가져오기
     @GetMapping("/{church_id}/members")
@@ -59,6 +58,12 @@ public class MemberController {
     @PostMapping("/{church_id}/members")
     public ResponseEntity<SaveChurchMemberResponse> saveChurchMember(@PathVariable("church_id") Long churchId, @Valid SaveChurchMemberRequest request) throws IOException {
         SaveChurchMemberResponse response = memberService.saveChurchMember(churchId, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/{church_id}/members/{church_member_id}")
+    public ResponseEntity<DeleteChurchMemberResponse> deleteChurchMember(@PathVariable("church_id") Long churchId, @PathVariable("church_member_id") Long churchMemberId) {
+        DeleteChurchMemberResponse response = memberService.deleteChurchMember(churchId, churchMemberId);
         return ResponseEntity.ok().body(response);
     }
 

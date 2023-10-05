@@ -579,4 +579,56 @@ public class MemberService {
                 .profileImageUrl(profileImageUrl)
                 .build();
     }
+
+    public DeleteChurchMemberResponse deleteChurchMember(Long churchId, Long churchMemberId) {
+        ChurchMember churchMember = memberRepository.findByIdAndChurchId(churchMemberId, churchId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CHURCH_MEMBER));
+
+        // 봉사 삭제
+        List<ChurchMemberMinistryAssociation> ministryAssociations = churchMemberMinistryAssociationRepository.findAllByChurchMember(churchMember);
+        if (!ministryAssociations.isEmpty()) {
+            churchMemberMinistryAssociationRepository.deleteAllByChurchMemberId(churchMemberId);
+        }
+
+        // 봉사 역할 삭제
+        List<ChurchMemberMinistryRoleAssociation> ministryRoleAssociations = churchMemberMinistryRoleAssociationRepository.findAllByChurchMember(churchMember);
+        if (!ministryRoleAssociations.isEmpty()) {
+            churchMemberMinistryRoleAssociationRepository.deleteAllByChurchMemberId(churchMemberId);
+        }
+
+        // 구역 역할 삭제
+        ChurchMemberCellRoleAssociation cellRoleAssociation = churchMemberCellRoleAssociationRepository.findByChurchMember(churchMember);
+        if (cellRoleAssociation != null) {
+            churchMemberCellRoleAssociationRepository.delete(cellRoleAssociation);
+        }
+
+        // 회별 역할 삭제
+        ChurchMemberGatheringRoleAssociation gatheringRoleAssociation = churchMemberGatheringRoleAssociationRepository.findByChurchMember(churchMember);
+        if (gatheringRoleAssociation != null) {
+            churchMemberGatheringRoleAssociationRepository.delete(gatheringRoleAssociation);
+        }
+
+        // 교구 역할 삭제
+        ChurchMemberParishRoleAssociation parishRoleAssociation = churchMemberParishRoleAssociationRepository.findByChurchMember(churchMember);
+        if (parishRoleAssociation != null) {
+            churchMemberParishRoleAssociationRepository.delete(parishRoleAssociation);
+        }
+
+        //  TODO 자기 자신이 세대주일 경우 세대원의 householdId 자신으로 , 관계는 본인으로 변경
+        if (churchMember.getId().equals(churchMember.getHouseholderId())) {
+            Long householderId = churchMember.getHouseholderId();
+
+            List<ChurchMember> churchMembers = memberRepository.findAllByChurchIdAndHouseholderId(churchId, householderId);
+            for (ChurchMember member : churchMembers) {
+                member.updateHouseholderId(member.getId());
+                member.updateRelationshipWithHouseHolder("본인");
+            }
+            memberRepository.saveAll(churchMembers);
+        }
+
+        // 논리 삭제
+        churchMember.setDeletedAt();
+        memberRepository.save(churchMember);
+
+        return DeleteChurchMemberResponse.from(churchMemberId);
+    }
 }
