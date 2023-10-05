@@ -62,6 +62,12 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
+    @DeleteMapping("/{church_id}/members/{church_member_id}")
+    public ResponseEntity<DeleteChurchMemberResponse> deleteChurchMember(@PathVariable("church_id") Long churchId, @PathVariable("church_member_id") Long churchMemberId) {
+        DeleteChurchMemberResponse response = memberService.deleteChurchMember(churchId, churchMemberId);
+        return ResponseEntity.ok().body(response);
+    }
+
     // multipart File 이 빈 스트링으로 요청되어질 때 null을 주입해주는 initBinder 추가
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
