@@ -625,7 +625,9 @@ public class MemberService {
             memberRepository.saveAll(churchMembers);
         }
 
-        memberRepository.delete(churchMember);
+        // 논리 삭제
+        churchMember.setDeletedAt();
+        memberRepository.save(churchMember);
 
         return DeleteChurchMemberResponse.from(churchMemberId);
     }

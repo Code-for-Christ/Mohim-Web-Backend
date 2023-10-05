@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "church_member")
-@SQLDelete(sql = "UPDATE church_member SET deleted_at = current_timestamp WHERE id = ?")
+//@SQLDelete(sql = "UPDATE church_member SET deleted_at = current_timestamp WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class ChurchMember {
     @Id
@@ -99,8 +99,8 @@ public class ChurchMember {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-//    @Column(name = "deleted_at")
-//    private LocalDateTime deletedAt = null;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt = null;
 
     @Builder
     public ChurchMember(String name, Church church, Cell cell, Gathering gathering, Position position, Long householderId, String relationshipWithHouseHolder, Integer birthYear, Integer salvationYear, Integer salvationMonth, Integer salvationDay, String carNumber, Gender gender, String phoneNumber, String address, String profileImageName, String profileImageThumbnail) {
@@ -180,5 +180,9 @@ public class ChurchMember {
 
     public void updateRelationshipWithHouseHolder(String relationshipWithHouseHolder) {
         this.relationshipWithHouseHolder = relationshipWithHouseHolder;
+    }
+
+    public void setDeletedAt() {
+        this.deletedAt = LocalDateTime.now();
     }
 }
