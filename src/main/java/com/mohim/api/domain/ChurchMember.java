@@ -2,10 +2,7 @@ package com.mohim.api.domain;
 
 import com.mohim.api.constant.Gender;
 import com.mohim.api.converter.GenderConverter;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -96,6 +93,48 @@ public class ChurchMember {
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Builder
+    public ChurchMember(String name, Church church, Cell cell, Gathering gathering, Position position, Long householderId, String relationshipWithHouseHolder, Integer birthYear, Integer salvationYear, Integer salvationMonth, Integer salvationDay, String carNumber, Gender gender, String phoneNumber, String address, String profileImageName, String profileImageThumbnail) {
+        this.name = name;
+        this.church = church;
+        this.cell = cell;
+        this.gathering = gathering;
+        this.position = position;
+        this.householderId = householderId;
+        this.relationshipWithHouseHolder = relationshipWithHouseHolder;
+        this.birthYear = birthYear;
+        this.salvationYear = salvationYear;
+        this.salvationMonth = salvationMonth;
+        this.salvationDay = salvationDay;
+        this.carNumber = carNumber;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.profileImageName = profileImageName;
+        this.profileImageThumbnail = profileImageThumbnail;
+    }
+
+    public static ChurchMember create(String name, Church church, Cell cell, Gathering gathering, Position position, Long householderId, String relationshipWithHouseHolder, Integer birthYear, Integer salvationYear, Integer salvationMonth, Integer salvationDay, String carNumber, Gender gender, String phoneNumber, String address) {
+        return ChurchMember.builder()
+                .name(name)
+                .church(church)
+                .cell(cell)
+                .gathering(gathering)
+                .position(position)
+                .householderId(householderId)
+                .relationshipWithHouseHolder(relationshipWithHouseHolder)
+                .birthYear(birthYear)
+                .salvationYear(salvationYear)
+                .salvationMonth(salvationMonth)
+                .salvationDay(salvationDay)
+                .carNumber(carNumber)
+                .gender(gender)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .build();
+    }
+
     public void updateChurchMember(String name, Cell cell, Gathering gathering, Position position, Long householderId, String relationshipWithHouseHolder, Integer birthYear, Integer salvationYear, Integer salvationMonth, Integer salvationDay, String carNumber, Gender gender, String phoneNumber, String address) {
         this.name = name;
         this.cell = cell;
@@ -127,4 +166,7 @@ public class ChurchMember {
         this.address = address;
     }
 
+    public void updateHouseholderId(Long householderId) {
+        this.householderId = householderId;
+    }
 }

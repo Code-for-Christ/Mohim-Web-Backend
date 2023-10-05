@@ -29,6 +29,9 @@ public enum ErrorCode {
     INVALID_EXTENSION(HttpStatus.BAD_REQUEST, "유효하지 않는 확장자 입니다."),
     UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드에 실패했습니다."),
 
+    // HOUSEHOLD 예외
+    INVALID_RELATIONSHIP(HttpStatus.BAD_REQUEST, "세대주의 관계는 본인만 가능합니다."),
+
     // POSITION 예외
     NOT_FOUND_POSITION(HttpStatus.NOT_FOUND, "존재하지 않는 직분입니다."),
 
