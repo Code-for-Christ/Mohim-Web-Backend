@@ -153,10 +153,6 @@ public class ProfileImageService {
                 thumbnailWidth = (int) (thumbnailHeight * aspectRatio);
             }
 
-
-//            // 이미지를 250x250 크기로 조정
-//            int thumbnailWidth = 250;
-//            int thumbnailHeight = 250;
             BufferedImage thumbnail = new BufferedImage(thumbnailWidth, thumbnailHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = thumbnail.createGraphics();
             graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
