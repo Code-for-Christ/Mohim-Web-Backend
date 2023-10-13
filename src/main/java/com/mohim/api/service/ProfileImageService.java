@@ -161,7 +161,9 @@ public class ProfileImageService {
 
             // 조정된 이미지를 Base64로 인코딩
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(thumbnail, fileType, baos);
+            // 용량을 줄이기 위해 jpeg로 저장 (압축 품질: 0.75)
+            ImageIO.write(thumbnail, "jpeg", baos);
+
             byte[] imageBytes = baos.toByteArray();
             String base64Thumbnail = Base64.getEncoder().encodeToString(imageBytes);
 
