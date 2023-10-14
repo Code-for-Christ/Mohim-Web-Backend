@@ -30,7 +30,8 @@ public enum ErrorCode {
     UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드에 실패했습니다."),
 
     // HOUSEHOLD 예외
-    INVALID_RELATIONSHIP(HttpStatus.BAD_REQUEST, "세대주의 관계는 본인만 가능합니다."),
+    INVALID_SELF_RELATIONSHIP(HttpStatus.BAD_REQUEST, "자신과 세대주의 관계는 본인만 가능합니다."),
+    INVALID_RELATIONSHIP(HttpStatus.BAD_REQUEST, "유효하지 않은 세대주와의 관계입니다."),
 
     // POSITION 예외
     NOT_FOUND_POSITION(HttpStatus.NOT_FOUND, "존재하지 않는 직분입니다."),

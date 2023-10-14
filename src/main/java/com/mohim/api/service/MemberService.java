@@ -1,6 +1,5 @@
 package com.mohim.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -58,6 +55,13 @@ public class MemberService {
     private EntityManager entityManager;
 
     private final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"};
+    private final String[] ALLOWED_RELATIONSHIP_WITH_HOUSE_HOLDER = {
+            "본인", "배우자", "자녀", "부",
+            "모", "형제", "조부", "조모",
+            "장인", "장모", "시부", "시모",
+            "사위", "자부", "손주", "기타"
+    };
+
     public ChurchMembersResponse getChurchMembers(Integer churchId, ChurchMembersRequest request, HttpServletRequest httpServletRequest) {
         List<ChurchMembersResponse.ChurchMember> churchMembers = memberRepository.findByChurchId(churchId, request).stream()
                 .map(churchMember -> {
@@ -204,6 +208,10 @@ public class MemberService {
 
         // 멤버 검증 및 가져오기
         ChurchMember churchMember = memberRepository.findByIdAndChurchId(memberId, churchId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        if (!validateRelationShipWithHousehold(request.getRelationshipWithHouseholder())) {
+            throw new CustomException(ErrorCode.INVALID_RELATIONSHIP);
+        }
 
         // 교구 검증 및 가져오기
         Parish upatedParish = parishRepository.findByChurchIdAndId(churchId, request.getParish()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PARISH));
@@ -409,6 +417,12 @@ public class MemberService {
         // 교회 검증 및 가져오기
         Church church = churchRepository.findById(churchId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CHURCH));
 
+        // 세대주와의 관계 검증
+        if (!validateRelationShipWithHousehold(request.getRelationshipWithHouseholder())) {
+            throw new CustomException(ErrorCode.INVALID_RELATIONSHIP);
+        }
+
+
         // 교구 검증 및 가져오기
         Parish parish = parishRepository.findByChurchIdAndId(churchId, request.getParish()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PARISH));
         // 구역 검증 및 가져오기
@@ -461,7 +475,7 @@ public class MemberService {
         } else { // 없을 경우, 자기 자신
             // 관계가 본인인지 검증
             if (!request.getRelationshipWithHouseholder().equals("본인")){
-                throw new CustomException(ErrorCode.INVALID_RELATIONSHIP);
+                throw new CustomException(ErrorCode.INVALID_SELF_RELATIONSHIP);
             }
             Long householderId = churchMember.getId();
             churchMember.updateHouseholderId(householderId);
@@ -637,5 +651,18 @@ public class MemberService {
         memberRepository.save(churchMember);
 
         return DeleteChurchMemberResponse.from(churchMemberId);
+    }
+
+    private boolean validateRelationShipWithHousehold (String relationshipWithHousehold) {
+        boolean result = false;
+
+        for(String relationship : ALLOWED_RELATIONSHIP_WITH_HOUSE_HOLDER ) {
+            if (relationshipWithHousehold.equals(relationship)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 }
