@@ -39,6 +39,7 @@ public class MemberService {
     private final ChurchMemberGatheringRoleAssociationRepository churchMemberGatheringRoleAssociationRepository;
     private final ChurchMemberParishRoleAssociationRepository churchMemberParishRoleAssociationRepository;
 
+    private final AuthRepository authRepository;
     private final ParishRepository parishRepository;
     private final CellRepository cellRepository;
     private final GatheringRepository gatheringRepository;
@@ -624,6 +625,12 @@ public class MemberService {
             }
             memberRepository.saveAll(churchMembers);
         }
+
+        // auth 관계 제거
+        Auth auth = authRepository.findByChurchMemberId(churchMemberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        auth.setChurch(null);
+        auth.setChurchMemberId(null);
+        authRepository.save(auth);
 
         // 논리 삭제
         churchMember.setDeletedAt();
